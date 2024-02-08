@@ -6,7 +6,7 @@ export default function Home() {
         <Navbar />
         <div className="flex items-center justify-center flex-col">
             <h1>Please select a cateogry to edit</h1>
-            <div className="flex flex-col underline">
+            <div className="flex flex-col underline mt-5">
                 <a href="/food">Food</a>
                 <a href="/exercises">Exercises</a>
                 <a href="/notes">Notes</a>

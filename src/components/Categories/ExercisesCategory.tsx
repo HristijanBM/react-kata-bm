@@ -30,13 +30,14 @@ export default function ExercisesCategory() {
     return (
         <div>
             <h1>Exercises</h1>
-            <h3>Add new workout</h3>
             <div className="flex flex-col w-full items-center">
                 <form onSubmit={handleSubmit(onSubmit)}>
+                    <h3>Add new workout</h3>
                     {exercisesInputs.map(({ name, type, placeholder, label }, i) => (
                         <Input
                             key={i}
                             type={type}
+                            label={label}
                             placeholder={placeholder}
                             {...register(name, { required: true })}
                         />
