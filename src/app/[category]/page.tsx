@@ -1,6 +1,6 @@
-import ExercisesCategory from "@/components/ExercisesCategory";
-import FoodCategory from "@/components/FoodCategory";
-import NotesCategory from "@/components/NotesCategory";
+import ExercisesCategory from "@/src/components/ExercisesCategory";
+import FoodCategory from "@/src/components/FoodCategory";
+import NotesCategory from "@/src/components/NotesCategory";
 
 const componentToShow = [
     {
