@@ -1,3 +1,6 @@
 export { default as Input } from './Input'
 export { default as Button } from './Button'
 export { default as Navbar } from './Navbar'
+export { default as ExercisesCategory } from './Categories/ExercisesCategory'
+export { default as FoodCategory } from './Categories/FoodCategory'
+export { default as NotesCategory } from './Categories/NotesCategory'

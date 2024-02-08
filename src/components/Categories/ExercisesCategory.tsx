@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { Database } from '@/src/lib/schema'
 import { Button, Input } from "@/src/components";
-import { exercisesInputs } from '../../inputData';
+import { exercisesInputs } from '../../../inputData';
 
 export default function ExercisesCategory() {
     const { register, handleSubmit, formState: { errors }, getValues, reset } = useForm();
