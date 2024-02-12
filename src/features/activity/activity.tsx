@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Button, Input } from "@/src/components";
 import { baseInputs } from '../../../inputData';
 import { useData, useSupabase } from '@/src/hooks';
+import FilteredActivities from './components/filtered-activities';
 
 export default function Activity() {
     const { data, refetch } = useData()
@@ -49,15 +50,8 @@ export default function Activity() {
                     <Button type="submit" />
                 </form>
             </div>
-            <h2 className='mb-5 font-bold text-green-500'>All Workouts 👍</h2>
-            <div className="flex flex-wrap mt-5">
-                {data?.map((activity, i) => (
-                    <div key={i} className='p-4 m-5 border border-1 border-green-200'>
-                        <h4>Title: {activity.title}</h4>
-                        <p>Type: {activity.type}</p>
-                    </div>
-                ))}
-            </div>
+            
+            <FilteredActivities />
         </div>
     )
 }
