@@ -2,7 +2,7 @@
 import { useForm } from 'react-hook-form';
 
 import { Button, Input } from "@/src/components";
-import { exercisesInputs } from '../../../inputData';
+import { baseInputs } from '../../../inputData';
 import { useData, useSupabase } from '@/src/hooks';
 
 export default function Activity() {
@@ -37,7 +37,7 @@ export default function Activity() {
                             <option value="food">Food</option>
                         </select>
                     </div>
-                    {exercisesInputs.map(({ name, type, placeholder, label }, i) => (
+                    {baseInputs.map(({ name, type, placeholder, label }, i) => (
                         <Input
                             key={i}
                             type={type}
@@ -49,11 +49,12 @@ export default function Activity() {
                     <Button type="submit" />
                 </form>
             </div>
-            <div className="mt-5">
-                <h2 className='mb-5 font-bold text-green-500'>All Workouts 👍</h2>
-                {data?.map((exercise, i) => (
-                    <div key={i}>
-                        <h4>{exercise.title}</h4>
+            <h2 className='mb-5 font-bold text-green-500'>All Workouts 👍</h2>
+            <div className="flex flex-wrap mt-5">
+                {data?.map((activity, i) => (
+                    <div key={i} className='p-4 m-5 border border-1 border-green-200'>
+                        <h4>Title: {activity.title}</h4>
+                        <p>Type: {activity.type}</p>
                     </div>
                 ))}
             </div>

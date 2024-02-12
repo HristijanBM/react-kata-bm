@@ -1,4 +1,4 @@
-export const exercisesInputs = [
+export const baseInputs = [
     {
         name: 'title',
         type: 'text',
