@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Navbar } from "@/src/components";
 
 export default function Home() {
@@ -5,11 +7,9 @@ export default function Home() {
     <>
         <Navbar />
         <div className="flex items-center justify-center flex-col">
-            <h1>Please select a cateogry to edit</h1>
+            <h1>Go and add new activity!</h1>
             <div className="flex flex-col underline mt-5">
-                <a href="/food">Food</a>
-                <a href="/exercises">Exercises</a>
-                <a href="/notes">Notes</a>
+                <Link href='/activity'>Activity</Link>
             </div>
         </div>
     </>

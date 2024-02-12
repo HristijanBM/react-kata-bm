@@ -18,12 +18,6 @@ export const exercisesInputs = [
         label: 'Intensity',
     },
     {
-        name: 'type',
-        type: 'text',
-        placeholder: 'Type', //TODO: Make this a SELECT Input
-        label: 'Type',
-    },
-    {
         name: 'note',
         type: 'text',
         placeholder: 'Note',
