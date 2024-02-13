@@ -17,12 +17,12 @@ const useFilteredData = ({ column, value }: useFilteredDataProps) => {
         return data
     }
 
-    const { data, refetch } = useQuery({
-        queryKey: ["filtered-activities"],
+    const { data, refetch, isLoading } = useQuery({
+        queryKey: ["filtered-activities", column, value],
         queryFn: () => getData(),
     });
 
-    return { data, refetch }
+    return { data, refetch, isLoading }
 }
 
 export default useFilteredData

@@ -1,21 +1,30 @@
 'use client'
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 
+import Activities from './components/activities';
 import { Button, Input } from "@/src/components";
-import { baseInputs } from '../../../inputData';
 import { useData, useSupabase } from '@/src/hooks';
-import FilteredActivities from './components/filtered-activities';
+import { baseInputs } from '../../../inputData';
+import SelectActivity from './components/select-activity-type';
 
 export default function Activity() {
-    const { data, refetch } = useData()
     const supabase = useSupabase()
     const { register, handleSubmit, reset } = useForm();
+    const [selectedValue, setSelectedValue] = useState<string | undefined>(undefined);
+    const { data, refetch, isLoading } = useData({ column: 'type', value: selectedValue })
 
     const onSubmit = async (data: any) => {
         await supabase.from('activities').insert(data)
+        setSelectedValue(undefined)
         reset();
         refetch();
     }
+
+    const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedValue(e.target.value);
+        refetch();
+    };
 
     return (
         <div>
@@ -50,8 +59,9 @@ export default function Activity() {
                     <Button type="submit" />
                 </form>
             </div>
-            
-            <FilteredActivities />
+
+            <SelectActivity onChange={onChange} />
+            <Activities data={data} isLoading={isLoading} />
         </div>
     )
 }
