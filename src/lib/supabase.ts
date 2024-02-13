@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       activities: {
         Row: {
+          categoryId: number | null
           duration: string
           id: number
           intensity: string | null
@@ -19,6 +20,7 @@ export type Database = {
           type: string
         }
         Insert: {
+          categoryId?: number | null
           duration: string
           id?: number
           intensity?: string | null
@@ -27,6 +29,7 @@ export type Database = {
           type: string
         }
         Update: {
+          categoryId?: number | null
           duration?: string
           id?: number
           intensity?: string | null
@@ -34,7 +37,98 @@ export type Database = {
           title?: string
           type?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "public_activities_categoryId_fkey"
+            columns: ["categoryId"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      activities_items: {
+        Row: {
+          activityId: number | null
+          created_at: string
+          id: number
+          itemId: number | null
+        }
+        Insert: {
+          activityId?: number | null
+          created_at?: string
+          id?: number
+          itemId?: number | null
+        }
+        Update: {
+          activityId?: number | null
+          created_at?: string
+          id?: number
+          itemId?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_activities_items_activityId_fkey"
+            columns: ["activityId"]
+            isOneToOne: false
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_activities_items_itemId_fkey"
+            columns: ["itemId"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      categories: {
+        Row: {
+          created_at: string
+          id: number
+          name: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string | null
+        }
         Relationships: []
+      }
+      items: {
+        Row: {
+          categoryId: number | null
+          created_at: string
+          id: number
+          name: string | null
+        }
+        Insert: {
+          categoryId?: number | null
+          created_at?: string
+          id?: number
+          name?: string | null
+        }
+        Update: {
+          categoryId?: number | null
+          created_at?: string
+          id?: number
+          name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_activity_items_categoryId_fkey"
+            columns: ["categoryId"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {
