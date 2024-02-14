@@ -6,6 +6,7 @@ interface FilteredActivitiesProps {
         note: string | null;
         title: string;
         type: string;
+        categoryId: number
     }[] | null | undefined
     isLoading: boolean
 }
@@ -18,7 +19,7 @@ export default function Activities({ data, isLoading }: FilteredActivitiesProps)
                 {isLoading ? <p>Loading ...</p>: data?.map((activity, i) => (
                     <div key={i} className='p-4 m-5 border border-1 border-green-200'>
                         <h4>Title: {activity.title}</h4>
-                        <p>Type: {activity.type}</p>
+                        <p>categoryId: {activity.categoryId}</p>
                     </div>
                 ))}
             </div>

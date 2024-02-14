@@ -1,27 +1,30 @@
+import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import useSupabase from './useSupabase';
 
 interface useDataProps {
-    column?: "duration" | "id" | "intensity" | "note" | "title" | "type" | undefined
+    column?: string
     value?: string
+    categoryId?: string
 }
 
-const useData = ({ column, value }: useDataProps) => {
-    const supabase = useSupabase()
-
+const useData = ({ column = "", value = "", categoryId = "" }: useDataProps) => {
     async function getData () {
-        if(column && value) {
-            const { data } = await supabase
-            .from('activities')
-            .select()
-            .eq(column, value);
-            return data
+        let items;
+        const { data: activities } = await axios.post('/api/activities/getActivities', {
+            column, value
+        })
+        const { data: categories } = await axios.get('/api/activities/getCategories')
+
+        if (categoryId !== "") {
+            const { data } = await axios.post('/api/activities/getItems', { categoryId })
+            items = data
         }
 
-        const { data } = await supabase
-            .from('activities')
-            .select()
-        return data
+        return {
+            activities,
+            categories,
+            items
+        }
     }
 
     const { data, refetch, isLoading } = useQuery({

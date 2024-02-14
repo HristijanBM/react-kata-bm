@@ -1,31 +1,61 @@
 'use client'
-import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useForm, useFieldArray } from 'react-hook-form';
 
 import Activities from './components/activities';
 import { Button, Input } from "@/src/components";
-import { useData, useSupabase } from '@/src/hooks';
-import { addActivityFormSelectInputOptions, baseInputs, filterActivitiesByTypeSelectInputOptions } from '../../../inputData';
+import { useData } from '@/src/hooks';
+import { baseInputs } from '../../../inputData';
 import SelectActivity from './components/select-activity-type';
 
 export default function Activity() {
-    const supabase = useSupabase()
-    const { register, handleSubmit, reset } = useForm();
-    const [selectedValue, setSelectedValue] = useState<string | undefined>(undefined);
+    const { register, handleSubmit, reset, control, getValues } = useForm();
+    const [selectedValues, setSelectedValues] = useState({
+        filterActivitiesSelected: '',
+        categoryId: ''
+    });
+    console.log(getValues(), 'getValues')
 
-    const { data, refetch, isLoading } = useData({ column: 'type', value: selectedValue })
+    const { data, refetch, isLoading } = useData({
+        column: 'categoryId',
+        value: selectedValues.filterActivitiesSelected,
+        categoryId: selectedValues.categoryId
+    })
 
     const onSubmit = async (data: any) => {
-        console.log(data, 'data')
-        await supabase.from('activities').insert(data)
-        setSelectedValue(undefined)
+        axios.post('/api/activities/createActivity', data)
+        setSelectedValues({ ...selectedValues, filterActivitiesSelected: '' })
         reset();
         refetch();
     }
 
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedValue(e.target.value);
+        setSelectedValues(
+            prevState => ({ ...prevState, [e.target.name]: e.target.value })
+        );
         refetch();
+    };
+
+    const { fields, append, remove } = useFieldArray({
+        name: 'items',
+        control,
+    });
+
+    useEffect(() => {
+        fields.length && fields.forEach(() => remove(0));
+
+        data?.items?.forEach((item) => {
+            append({
+                id: item.id,
+                name: item.name,
+                checked: false,
+            });
+        });
+    }, [selectedValues.categoryId]);
+
+    const handleCheckboxChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
+        fields[index].checked = event.target.checked;
     };
 
     return (
@@ -33,10 +63,12 @@ export default function Activity() {
             <h3>Add new Activity</h3>
             <div className="flex flex-col w-full items-center">
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <SelectActivity 
-                        {...register('type')} 
+                    <SelectActivity
+                        {...register('categoryId')}
+                        name="categoryId"
+                        onChange={onChange}
                         label='Select activity type'
-                        options={addActivityFormSelectInputOptions}
+                        options={data?.categories}
                     />
                     {baseInputs.map(({ name, type, placeholder, label }, i) => (
                         <Input
@@ -44,19 +76,32 @@ export default function Activity() {
                             type={type}
                             label={label}
                             placeholder={placeholder}
-                            {...register(name, { required: true })}
+                            {...register(`data.${name}`, { required: true })}
                         />
+                    ))}
+                    {fields.map((item, index) => (
+                        <div key={index} className='my-2'>
+                            <input
+                                type="checkbox"
+                                checked={fields[index].checked}
+                                {...register(`items.${index}.checked`)}
+                                onChange={(e) => handleCheckboxChange(index, e)}
+                            />
+                            <label htmlFor={`items.${index}.checked`}>{item.name}</label>
+                            <button type="button" onClick={() => remove(index)}>Remove</button>
+                        </div>
                     ))}
                     <Button type="submit" />
                 </form>
             </div>
 
-            <SelectActivity 
+            {/* <SelectActivity
+                name="filterActivitiesSelected"
                 onChange={onChange}
                 label='Search by activity type'
-                options={filterActivitiesByTypeSelectInputOptions}
-            />
-            <Activities data={data} isLoading={isLoading} />
+                options={data?.categories}
+            /> */}
+            <Activities data={data?.activities} isLoading={isLoading} />
         </div>
     )
 }

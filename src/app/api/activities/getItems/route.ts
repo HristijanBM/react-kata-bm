@@ -2,19 +2,14 @@ import { supabase } from "@/src/lib/initSupabase";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-    const { column, value } = await request.json()
+    const { categoryId } = await request.json();
     try {
-        if (column && value) {
-            const { data } = await supabase
-            .from('activities')
-            .select()
-            .eq(column, value);
-            return NextResponse.json(data);
-        }
+        if (categoryId === undefined) return;
 
         const { data } = await supabase
-            .from('activities')
+            .from('items')
             .select()
+            .eq('categoryId', categoryId)
 
         return NextResponse.json(data);
     } catch (error) {
